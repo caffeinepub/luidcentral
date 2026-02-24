@@ -5,6 +5,7 @@ export interface Client {
   passwordHash: string;
   createdAt: string;
   tier?: SupportTier;
+  clientName?: string;
 }
 
 export interface Staff {

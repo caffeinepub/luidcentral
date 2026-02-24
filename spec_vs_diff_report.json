@@ -1,15 +1,15 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-24T23:07:03.669Z",
-  "summary": "The diff implements all five requirements (REQ-13 through REQ-17). REQ-13 is addressed by removing admin/staff route references from the client portal. REQ-14 is addressed by adding chat toggles to both Master and Staff panels and updating ChatView to show an offline state. REQ-15 is addressed by removing Caffeine AI watermarks from login pages and the portal. REQ-16 is addressed by adding the SupportTier type, tier field on Client, updateClientTier in db.ts, and a tier dropdown in ClientsTable. REQ-17 is addressed by adding ClientProfile.tsx and wiring it into the Header. One minor gap exists: the AC for REQ-14 specifies the offline message should say 'Support chat is currently offline' with a neon-styled message, but the implementation uses a different message in Portuguese.",
+  "generatedAt": "2026-02-24T23:53:12.718Z",
+  "summary": "The diff implements most of REQ-24: the Header component now displays the logo image, and all three login pages (ClientLogin, MasterLogin, StaffLogin) show the logo above the form heading. However, the actual static asset file frontend/public/assets/generated/luid-logo.dim_256x256.png is not present in the diff (no added files), meaning the image file itself was not saved as required.",
   "missing_requirements": [
     {
-      "id": "REQ-14",
-      "requirement": "When chat status is Offline, the client portal chat tab shows a neon-styled 'Support chat is currently offline' message and the message input is hidden or disabled.",
-      "reason": "The ChatView.tsx renders 'CHAT INDISPONÍVEL' and 'O suporte via chat está temporariamente offline' rather than the specified English text 'Support chat is currently offline'. While functionally equivalent and styled, the exact required message text is not present.",
+      "id": "REQ-24",
+      "requirement": "Save the uploaded logo image as a static asset at frontend/public/assets/generated/luid-logo.dim_256x256.png",
+      "reason": "The diff shows 0 added files and no binary/image asset was committed. The PNG file at frontend/public/assets/generated/luid-logo.dim_256x256.png is not present in the diff, so the acceptance criterion 'The logo image is served from /assets/generated/luid-logo.dim_256x256.png' cannot be verified as satisfied.",
       "evidence": [
-        "frontend/src/components/ChatView.tsx"
+        "frontend/public/assets/generated/luid-logo.dim_256x256.png"
       ]
     }
   ],
@@ -17,18 +17,10 @@
   "confidence": 0.82,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/components/ChatView.tsx",
-    "frontend/src/components/ClientProfile.tsx",
-    "frontend/src/components/ClientsTable.tsx",
     "frontend/src/components/Header.tsx",
-    "frontend/src/lib/db.ts",
     "frontend/src/pages/ClientLogin.tsx",
-    "frontend/src/pages/ClientPortal.tsx",
     "frontend/src/pages/MasterLogin.tsx",
-    "frontend/src/pages/MasterPanel.tsx",
     "frontend/src/pages/StaffLogin.tsx",
-    "frontend/src/pages/StaffPanel.tsx",
-    "frontend/src/types/db.ts",
     "project_state.json"
   ]
 }

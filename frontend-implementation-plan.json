@@ -1,166 +1,39 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Hide admin links from client portal, chat online/offline toggle, remove watermark, add client profile with support tier",
+  "title": "Add custom platform logo to all pages",
   "requirements": [
     {
-      "id": "REQ-13",
-      "summary": "Remove all admin panel links and references from the client portal UI",
+      "id": "REQ-24",
+      "summary": "Replace text-only branding with the custom Luid logo image across the Header component and all three login pages (ClientLogin, MasterLogin, StaffLogin)",
       "acceptanceCriteria": [
-        "No links or buttons pointing to /master or /staff appear anywhere in the client portal after login.",
-        "The client portal header, footer, tabs, and dashboard contain zero references to admin or staff routes.",
-        "Navigating directly to /master and /staff still works as before."
+        "The logo image is served from `/assets/generated/luid-logo.dim_256x256.png`",
+        "The Header component displays the logo image instead of a text-only brand mark",
+        "The ClientLogin page shows the logo above the login form heading",
+        "The MasterLogin page shows the logo above the login form heading",
+        "The StaffLogin page shows the logo above the login form heading",
+        "All existing functionality and styling remain intact"
       ],
       "file_operations": [
-        {
-          "path": "frontend/src/pages/ClientPortal.tsx",
-          "operation": "modify",
-          "description": "Review and remove any links, buttons, or references to /master or /staff routes from the client portal dashboard and navigation tabs."
-        },
         {
           "path": "frontend/src/components/Header.tsx",
           "operation": "modify",
-          "description": "Ensure the Header component does not display any navigation links to admin or staff panels when the current user role is 'client'."
-        }
-      ]
-    },
-    {
-      "id": "REQ-14",
-      "summary": "Add chat availability toggle in admin panels with offline mode for client portal",
-      "acceptanceCriteria": [
-        "Master panel and Staff panel each have a clearly labeled toggle or button to set chat status to Online or Offline.",
-        "Chat status is stored in localStorage (e.g., key 'chat_status') and defaults to Online.",
-        "When chat status is Offline, the client portal chat tab shows a neon-styled 'Support chat is currently offline' message and the message input is hidden or disabled.",
-        "When chat status is Online, the client portal chat works as normal.",
-        "Changes to the toggle are reflected immediately without requiring a page reload."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/MasterPanel.tsx",
-          "operation": "modify",
-          "description": "Add a chat availability toggle (Online/Offline) using a Button or Switch component at the top of the Chat section. Store the chat status in localStorage under the key 'chat_status' (default 'Online'). Update the state immediately when toggled."
-        },
-        {
-          "path": "frontend/src/pages/StaffPanel.tsx",
-          "operation": "modify",
-          "description": "Add a chat availability toggle (Online/Offline) using a Button or Switch component at the top of the Chat section. Read and write to localStorage key 'chat_status'. Ensure the toggle state reflects the current localStorage value on mount."
-        },
-        {
-          "path": "frontend/src/components/ChatView.tsx",
-          "operation": "modify",
-          "description": "Read the chat status from localStorage ('chat_status'). If the status is 'Offline', display a neon-styled message 'Support chat is currently offline' and hide or disable the message input field. If 'Online', render the chat interface normally."
-        },
-        {
-          "path": "frontend/src/pages/ClientPortal.tsx",
-          "operation": "modify",
-          "description": "Ensure the Chat tab in the client portal passes the necessary props to ChatView and respects the chat availability status for UI updates."
-        }
-      ]
-    },
-    {
-      "id": "REQ-15",
-      "summary": "Remove the 'Build with Caffeine AI' watermark from all pages",
-      "acceptanceCriteria": [
-        "No 'Build with Caffeine AI', 'Powered by Caffeine', or similar text appears on any page or component.",
-        "No hidden or visually subtle watermark referencing Caffeine AI exists in the DOM."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/ClientPortal.tsx",
-          "operation": "modify",
-          "description": "Search for and remove any 'Build with Caffeine AI' or similar attribution text or footer elements from the ClientPortal component."
-        },
-        {
-          "path": "frontend/src/pages/MasterPanel.tsx",
-          "operation": "modify",
-          "description": "Search for and remove any 'Build with Caffeine AI' or similar attribution text or footer elements from the MasterPanel component."
-        },
-        {
-          "path": "frontend/src/pages/StaffPanel.tsx",
-          "operation": "modify",
-          "description": "Search for and remove any 'Build with Caffeine AI' or similar attribution text or footer elements from the StaffPanel component."
+          "description": "Replace the existing text-only 'LuidCorporation' branding with an <img> element that displays the generated logo from `frontend/public/assets/generated/luid-logo.dim_256x256.png`. Reference the image using the src path `/assets/generated/luid-logo.dim_256x256.png`. Preserve all existing Header functionality including the role badge, profile button, and logout action. Maintain the neon green aesthetic and glass-panel styling."
         },
         {
           "path": "frontend/src/pages/ClientLogin.tsx",
           "operation": "modify",
-          "description": "Search for and remove any 'Build with Caffeine AI' or similar attribution text from the ClientLogin page."
+          "description": "Add an <img> element displaying the logo from `frontend/public/assets/generated/luid-logo.dim_256x256.png` above the existing login form heading. Reference the image using `/assets/generated/luid-logo.dim_256x256.png` as the src. Center the logo and ensure it fits the existing neon green aesthetic. Keep all authentication logic, form fields, and routing behavior unchanged."
         },
         {
           "path": "frontend/src/pages/MasterLogin.tsx",
           "operation": "modify",
-          "description": "Search for and remove any 'Build with Caffeine AI' or similar attribution text from the MasterLogin page."
+          "description": "Add an <img> element displaying the logo from `frontend/public/assets/generated/luid-logo.dim_256x256.png` above the existing login form heading. Reference the image using `/assets/generated/luid-logo.dim_256x256.png` as the src. Center the logo and ensure it fits the existing neon green aesthetic. Preserve all authentication logic, form validation, and routing to the master panel."
         },
         {
           "path": "frontend/src/pages/StaffLogin.tsx",
           "operation": "modify",
-          "description": "Search for and remove any 'Build with Caffeine AI' or similar attribution text from the StaffLogin page."
-        },
-        {
-          "path": "frontend/src/components/Header.tsx",
-          "operation": "modify",
-          "description": "Search for and remove any 'Build with Caffeine AI' or similar attribution text from the Header component."
-        }
-      ]
-    },
-    {
-      "id": "REQ-16",
-      "summary": "Add support tier field to client records with management in Master panel",
-      "acceptanceCriteria": [
-        "The Client TypeScript interface and db.ts include a 'tier' field typed as 'Basic' | 'Premium' | 'Enterprise'.",
-        "Newly created clients default to 'Basic' tier.",
-        "The Master admin panel clients table displays each client's current tier.",
-        "Master admin can change any client's tier via a dropdown (Basic / Premium / Enterprise); the change is immediately persisted to localStorage.",
-        "Tier changes are reflected instantly without a full page reload."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/types/db.ts",
-          "operation": "modify",
-          "description": "Add a 'tier' field to the Client interface with type 'Basic' | 'Premium' | 'Enterprise'. Make it optional with a default type or union including undefined for backward compatibility."
-        },
-        {
-          "path": "frontend/src/lib/db.ts",
-          "operation": "modify",
-          "description": "Update the createClient function to set tier to 'Basic' by default when creating new clients. Add a new function updateClientTier(luidId: string, tier: 'Basic' | 'Premium' | 'Enterprise') that updates the tier field in localStorage and returns the updated client."
-        },
-        {
-          "path": "frontend/src/components/ClientsTable.tsx",
-          "operation": "modify",
-          "description": "Add a 'Support Tier' column to the clients table. For each client row, display the current tier (defaulting to 'Basic' if undefined) and include a Select dropdown with options Basic, Premium, Enterprise. On change, call updateClientTier from db.ts and refresh the table state immediately."
-        },
-        {
-          "path": "frontend/src/components/AddClientForm.tsx",
-          "operation": "modify",
-          "description": "Ensure newly created clients via AddClientForm default to 'Basic' tier by passing the default value when calling createClient."
-        }
-      ]
-    },
-    {
-      "id": "REQ-17",
-      "summary": "Add client profile section displaying LUID ID, creation date, and support tier badge",
-      "acceptanceCriteria": [
-        "The client portal header or dashboard contains a clickable profile element showing the user's LUID ID.",
-        "Clicking the profile element opens a modal or inline panel with: LUID ID, account creation date, and support tier.",
-        "The support tier is displayed as a styled badge using the neon green theme (e.g., green glow for Premium/Enterprise, muted for Basic).",
-        "The tier displayed matches the value stored in localStorage for that client.",
-        "If the master admin changes the tier, refreshing the portal shows the updated tier.",
-        "The profile view can be dismissed or closed."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/ClientProfile.tsx",
-          "operation": "create",
-          "description": "Create a ClientProfile component that accepts luidId as a prop. Fetch the client record from localStorage using getClient(luidId). Display the LUID ID, account creation date (formatted), and support tier as a styled badge. Use a neon green glow for Premium/Enterprise tiers and a muted style for Basic. Render this inside a Dialog or Modal component from shadcn/ui for dismissibility."
-        },
-        {
-          "path": "frontend/src/components/Header.tsx",
-          "operation": "modify",
-          "description": "For users with role 'client', add a clickable profile icon or text element displaying the user's LUID ID in the header. Wire this element to open the ClientProfile modal/dialog when clicked."
-        },
-        {
-          "path": "frontend/src/pages/ClientPortal.tsx",
-          "operation": "modify",
-          "description": "Import and integrate the ClientProfile component. Add state to control the profile modal open/closed state. Pass the profile toggle handler to Header or render the ClientProfile dialog conditionally based on the open state."
+          "description": "Add an <img> element displaying the logo from `frontend/public/assets/generated/luid-logo.dim_256x256.png` above the existing login form heading. Reference the image using `/assets/generated/luid-logo.dim_256x256.png` as the src. Center the logo and ensure it fits the existing neon green aesthetic. Keep all staff authentication logic and routing intact."
         }
       ]
     }

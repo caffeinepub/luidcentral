@@ -1,17 +1,19 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 7,
-  "summary": "LuidCentral — a full-stack support central web app with localStorage-based internal database (clientes, staff, tickets, chat_messages tables), manual login validation (no external auth), a master admin panel at /master for managing clients, a staff panel at /staff, a full customer support portal with tickets and real-time chat, a modern Neon Green aesthetic, persistent login sessions (stay logged in), real-time notifications for new tickets/messages, and a prominent Create Ticket button in the client portal.",
+  "projectStateVersion": 11,
+  "summary": "LuidCentral (system: Luid Central De Atendimento, company: LuidCorporation) — a full-stack support central web app with localStorage-based internal database (clientes, staff, tickets, chat_messages tables), manual login validation (no external auth), a master admin panel at /master for managing clients (including editing client and staff credentials, and storing client display name separate from LUID ID), a staff panel at /staff, a full customer support portal with tickets and real-time chat, a modern Neon Green aesthetic, persistent login sessions (stay logged in), real-time notifications for new tickets/messages, and a prominent Create Ticket button in the client portal.",
   "architectural_notes": [
     "All data persisted in localStorage to simulate a backend database across page refreshes.",
     "No external authentication libraries; login is a plain DB lookup against internal tables.",
     "Master credentials hardcoded: username SidneiCosta00, password Nikebolado@4.",
     "Routes /master and /staff must not be linked from the home page.",
     "Session persistence stored in localStorage under session keys so users remain logged in after page refresh.",
-    "Client support tier (Premium, Basic, Enterprise) stored per client record in localStorage and manageable from the master panel."
+    "Client support tier (Premium, Basic, Enterprise) stored per client record in localStorage and manageable from the master panel.",
+    "Company name is LuidCorporation; system name is Luid Central De Atendimento. Client records store a separate 'name' field (display name) distinct from LUID ID."
   ],
   "known_issues": [],
   "isFixRequest": false,
+  "imageRequirements": "## Edit Images\n- Recreate the uploaded green circuit-board diamond logo on a transparent background instead of black (luid-logo.dim_256x256.png)",
   "existing_features": [
     {
       "id": "feature-create-a-persistent-internal-database-layer-using-localstorage-that-stores-and-manages-four-collections-clients-luidid-passwordhash-createdat-staff-username-passwordhash-role-tickets-id-luidid-subject-messages-status-createdat-updatedat-and-chat-messages-id-luidid-sender-content-timestamp-expose-a-typed-db-utility-module-used-across-the-app-pre-seed-one-admin-record-username-sidneicosta00-password-nikebolado-4-in-an-admins-collection",
@@ -148,6 +150,62 @@
         "REQ-17"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-rebrand-the-application-across-all-pages-and-ui-surfaces-set-the-company-name-to-luidcorporation-and-the-system-name-to-luid-central-de-atendimento-update-the-page-title-in-index-html-the-header-component-logo-title-all-login-page-headings-and-any-other-visible-branding-references-to-reflect-both-names-consistently",
+      "title": "Rebrand the application across all pages and UI surfaces: set the company name to 'LuidCorporation' and the system name to 'Luid Central De Atendimento'. Update the page title in index.html, the Header component logo/title, all login page headings, and any other visible branding references to reflect both names consistently.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-clientname-display-name-field-to-the-client-record-in-the-localstorage-clients-collection-distinct-from-the-luid-id-the-field-is-optional-and-defaults-to-an-empty-string-update-the-typescript-type-definition-in-frontend-src-types-db-ts-accordingly-update-frontend-src-lib-db-ts-to-persist-and-retrieve-this-field",
+      "title": "Add a 'clientName' (display name) field to the Client record in the localStorage 'clients' collection, distinct from the LUID ID. The field is optional and defaults to an empty string. Update the TypeScript type definition in frontend/src/types/db.ts accordingly. Update frontend/src/lib/db.ts to persist and retrieve this field.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-in-the-master-admin-panel-s-client-management-section-add-the-ability-to-set-and-edit-the-clientname-display-name-for-each-client-the-addclientform-component-must-include-an-optional-client-name-text-input-alongside-the-luid-id-and-password-fields-the-clientstable-component-must-display-the-client-name-column-and-include-an-inline-edit-control-e-g-an-editable-field-or-edit-button-to-update-the-client-name-for-existing-clients",
+      "title": "In the Master admin panel's client management section, add the ability to set and edit the 'clientName' (display name) for each client. The AddClientForm component must include an optional 'Client Name' text input alongside the LUID ID and password fields. The ClientsTable component must display the client name column and include an inline edit control (e.g., an editable field or edit button) to update the client name for existing clients.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-in-the-master-admin-panel-add-an-edit-credentials-capability-for-existing-client-records-each-client-row-in-the-clientstable-must-include-an-action-to-change-the-client-s-password-clicking-it-opens-an-inline-form-or-modal-with-a-new-password-input-and-confirmation-on-submit-the-new-password-is-hashed-and-saved-to-the-client-s-record-in-localstorage-replacing-the-old-passwordhash",
+      "title": "In the Master admin panel, add an 'Edit Credentials' capability for existing client records. Each client row in the ClientsTable must include an action to change the client's password. Clicking it opens an inline form or modal with a new password input (and confirmation). On submit, the new password is hashed and saved to the client's record in localStorage, replacing the old passwordHash.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-in-the-master-admin-panel-add-an-edit-credentials-capability-for-existing-staff-records-the-staff-management-section-in-masterpanel-tsx-must-list-all-staff-members-and-include-an-action-per-row-to-change-a-staff-member-s-username-and-or-password-clicking-it-opens-an-inline-form-or-modal-on-submit-the-updated-username-and-or-hashed-password-are-saved-to-the-staff-record-in-localstorage",
+      "title": "In the Master admin panel, add an 'Edit Credentials' capability for existing staff records. The staff management section (in MasterPanel.tsx) must list all staff members and include an action per row to change a staff member's username and/or password. Clicking it opens an inline form or modal. On submit, the updated username and/or hashed password are saved to the staff record in localStorage.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-client-profile-modal-clientprofile-tsx-to-display-the-client-s-display-name-clientname-alongside-their-luid-id-if-no-name-is-set-show-a-placeholder-such-as-no-name-set-the-profile-view-must-clearly-differentiate-the-display-name-label-from-the-luid-id-label",
+      "title": "Update the client profile modal (ClientProfile.tsx) to display the client's display name ('clientName') alongside their LUID ID. If no name is set, show a placeholder such as 'No name set'. The profile view must clearly differentiate the display name label from the LUID ID label.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-save-the-uploaded-logo-image-as-a-static-asset-at-frontend-public-assets-generated-luid-logo-dim-256x256-png-and-use-it-as-the-platform-logo-across-all-pages-replace-any-existing-text-only-or-placeholder-logo-in-the-header-component-frontend-src-components-header-tsx-with-an-img-tag-referencing-assets-generated-luid-logo-dim-256x256-png-and-also-display-it-prominently-on-all-three-login-pages-clientlogin-masterlogin-stafflogin-above-the-login-form-heading",
+      "title": "Save the uploaded logo image as a static asset at `frontend/public/assets/generated/luid-logo.dim_256x256.png` and use it as the platform logo across all pages: replace any existing text-only or placeholder logo in the Header component (`frontend/src/components/Header.tsx`) with an `<img>` tag referencing `/assets/generated/luid-logo.dim_256x256.png`, and also display it prominently on all three login pages (ClientLogin, MasterLogin, StaffLogin) above the login form heading.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -244,6 +302,24 @@
     {
       "id": "AR-16",
       "summary": "Client profile page: when client clicks their profile, they see their support tier (Premium, Basic, or Enterprise). The tier is editable from the master admin panel and stored per client in the DB.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Rename system to 'Luid Central De Atendimento' and company to 'LuidCorporation' across all pages/branding",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Master panel: ability to edit credentials (password) for existing clients and staff members",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Add a separate 'client name' field (display name) to client records, distinct from the LUID ID. Master panel can set/edit this name. Client profile shows both name and LUID ID.",
       "reqIds": [],
       "status": "pending"
     }

@@ -2,56 +2,13 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-remove-all-visible-links-buttons-or-references-to-admin-panels-master-staff-from-the-client-portal-ui-the-client-portal-including-its-header-footer-navigation-tabs-and-dashboard-must-contain-no-mention-of-or-navigation-to-any-admin-or-staff-routes-admin-panels-remain-accessible-only-by-direct-url",
-      "featureTitle": "Remove all visible links, buttons, or references to admin panels (/master, /staff) from the client portal UI. The client portal — including its header, footer, navigation tabs, and dashboard — must contain no mention of or navigation to any admin or staff routes. Admin panels remain accessible only by direct URL.",
-      "files": [
-        "frontend/src/components/Header.tsx",
-        "frontend/src/pages/ClientPortal.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-13"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-chat-availability-toggle-online-offline-to-the-master-admin-panel-and-staff-panel-when-set-to-offline-the-chat-section-in-the-client-portal-displays-a-message-such-as-support-chat-is-currently-offline-and-the-chat-input-is-disabled-when-set-to-online-the-chat-functions-normally-persist-the-chat-status-in-localstorage-so-it-survives-page-reloads",
-      "featureTitle": "Add a chat availability toggle (Online / Offline) to the Master admin panel and Staff panel. When set to Offline, the chat section in the client portal displays a message such as 'Support chat is currently offline' and the chat input is disabled. When set to Online, the chat functions normally. Persist the chat status in localStorage so it survives page reloads.",
-      "files": [
-        "frontend/src/components/ChatView.tsx",
-        "frontend/src/pages/ClientPortal.tsx",
-        "frontend/src/pages/MasterPanel.tsx",
-        "frontend/src/pages/StaffPanel.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-14"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-remove-the-build-with-caffeine-ai-watermark-or-any-similar-branding-attribution-text-from-all-pages-of-the-application",
-      "featureTitle": "Remove the 'Build with Caffeine AI' watermark or any similar branding attribution text from all pages of the application.",
+      "featureId": "feature-save-the-uploaded-logo-image-as-a-static-asset-at-frontend-public-assets-generated-luid-logo-dim-256x256-png-and-use-it-as-the-platform-logo-across-all-pages-replace-any-existing-text-only-or-placeholder-logo-in-the-header-component-frontend-src-components-header-tsx-with-an-img-tag-referencing-assets-generated-luid-logo-dim-256x256-png-and-also-display-it-prominently-on-all-three-login-pages-clientlogin-masterlogin-stafflogin-above-the-login-form-heading",
+      "featureTitle": "Save the uploaded logo image as a static asset at `frontend/public/assets/generated/luid-logo.dim_256x256.png` and use it as the platform logo across all pages: replace any existing text-only or placeholder logo in the Header component (`frontend/src/components/Header.tsx`) with an `<img>` tag referencing `/assets/generated/luid-logo.dim_256x256.png`, and also display it prominently on all three login pages (ClientLogin, MasterLogin, StaffLogin) above the login form heading.",
       "files": [
         "frontend/src/components/Header.tsx",
         "frontend/src/pages/ClientLogin.tsx",
-        "frontend/src/pages/ClientPortal.tsx",
         "frontend/src/pages/MasterLogin.tsx",
-        "frontend/src/pages/MasterPanel.tsx",
-        "frontend/src/pages/StaffLogin.tsx",
-        "frontend/src/pages/StaffPanel.tsx"
+        "frontend/src/pages/StaffLogin.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -61,47 +18,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-15"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-support-tier-field-values-basic-premium-enterprise-to-the-client-record-in-the-localstorage-clients-collection-in-the-master-admin-panel-s-client-management-section-allow-the-admin-to-assign-or-change-the-support-tier-for-each-client-via-a-dropdown-or-segmented-control-next-to-each-client-row-new-clients-default-to-basic-if-no-tier-is-set",
-      "featureTitle": "Add a support tier field (values: Basic, Premium, Enterprise) to the client record in the localStorage 'clients' collection. In the Master admin panel's client management section, allow the admin to assign or change the support tier for each client via a dropdown or segmented control next to each client row. New clients default to 'Basic' if no tier is set.",
-      "files": [
-        "frontend/src/components/ClientsTable.tsx",
-        "frontend/src/lib/db.ts",
-        "frontend/src/types/db.ts"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-16"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-profile-section-to-the-client-portal-a-clickable-profile-element-e-g-avatar-icon-or-the-user-s-luid-id-displayed-in-the-header-opens-a-profile-view-or-modal-the-profile-view-displays-the-client-s-luid-id-account-creation-date-and-their-current-support-tier-basic-premium-or-enterprise-with-a-visually-distinct-neon-green-tier-badge-the-tier-value-is-read-from-the-client-s-record-in-localstorage",
-      "featureTitle": "Add a profile section to the client portal. A clickable profile element (e.g., avatar icon or the user's LUID ID displayed in the header) opens a profile view or modal. The profile view displays the client's LUID ID, account creation date, and their current support tier (Basic, Premium, or Enterprise) with a visually distinct neon-green tier badge. The tier value is read from the client's record in localStorage.",
-      "files": [
-        "frontend/src/components/ClientProfile.tsx",
-        "frontend/src/components/Header.tsx",
-        "frontend/src/pages/ClientPortal.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-17"
+        "REQ-24"
       ],
       "confidence": "high"
     }

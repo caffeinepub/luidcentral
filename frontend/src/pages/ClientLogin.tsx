@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useAuth } from '../contexts/AuthContext';
 import { validateClientLogin } from '../lib/db';
-import { Terminal, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 
 export default function ClientLogin() {
   const [luidId, setLuidId] = useState('');
@@ -61,24 +61,25 @@ export default function ClientLogin() {
           }}
         >
           <div className="text-center mb-8">
-            <div
-              className="w-16 h-16 rounded-xl mx-auto mb-4 flex items-center justify-center"
-              style={{
-                background: 'oklch(0.85 0.28 142 / 0.1)',
-                border: '1px solid oklch(0.85 0.28 142 / 0.4)',
-                boxShadow: '0 0 15px oklch(0.85 0.28 142 / 0.2)',
-              }}
-            >
-              <Terminal className="w-8 h-8" style={{ color: 'oklch(0.85 0.28 142)' }} />
+            <div className="flex justify-center mb-4">
+              <img
+                src="/assets/generated/luid-logo.dim_256x256.png"
+                alt="LuidCorporation"
+                className="w-20 h-20 object-contain"
+                style={{ filter: 'drop-shadow(0 0 12px oklch(0.85 0.28 142 / 0.6))' }}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).style.display = 'none';
+                }}
+              />
             </div>
             <h1
-              className="text-2xl font-bold tracking-widest font-mono"
+              className="text-xl font-bold tracking-widest font-mono"
               style={{ color: 'oklch(0.85 0.28 142)', textShadow: '0 0 15px oklch(0.85 0.28 142 / 0.4)' }}
             >
-              LUIDCENTRAL
+              LUID CENTRAL DE ATENDIMENTO
             </h1>
             <p className="text-xs font-mono mt-1" style={{ color: 'oklch(0.5 0.04 150)' }}>
-              PORTAL DO CLIENTE
+              LuidCorporation — Portal do Cliente
             </p>
           </div>
 
@@ -183,7 +184,7 @@ export default function ClientLogin() {
         </div>
 
         <p className="text-center text-xs font-mono mt-4" style={{ color: 'oklch(0.3 0.02 150)' }}>
-          © {new Date().getFullYear()} LuidCentral
+          © {new Date().getFullYear()} LuidCorporation
         </p>
       </div>
     </div>

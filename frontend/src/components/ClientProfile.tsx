@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
-import { User, Calendar, Shield, X } from 'lucide-react';
+import { User, Calendar, Shield, Tag } from 'lucide-react';
 
 interface ClientProfileProps {
   luidId: string;
@@ -62,6 +62,7 @@ function TierBadge({ tier }: { tier: SupportTier }) {
 export function ClientProfile({ luidId, open, onClose }: ClientProfileProps) {
   const client = findClient(luidId);
   const tier: SupportTier = client?.tier ?? 'Basic';
+  const clientName = client?.clientName ?? '';
   const createdAt = client?.createdAt
     ? new Date(client.createdAt).toLocaleDateString('pt-BR', {
         day: '2-digit',
@@ -116,12 +117,20 @@ export function ClientProfile({ luidId, open, onClose }: ClientProfileProps) {
               <User className="w-7 h-7" style={{ color: 'oklch(0.85 0.28 142)' }} />
             </div>
             <div>
+              {clientName && (
+                <p
+                  className="text-base font-bold font-mono tracking-wide"
+                  style={{ color: 'oklch(0.92 0.04 150)' }}
+                >
+                  {clientName}
+                </p>
+              )}
               <p className="text-xs font-mono" style={{ color: 'oklch(0.45 0.03 150)' }}>
                 LUID ID
               </p>
               <p
-                className="text-base font-bold font-mono tracking-wider mt-0.5"
-                style={{ color: 'oklch(0.92 0.04 150)' }}
+                className="text-sm font-bold font-mono tracking-wider mt-0.5"
+                style={{ color: 'oklch(0.85 0.28 142)', textShadow: '0 0 8px oklch(0.85 0.28 142 / 0.3)' }}
               >
                 {luidId}
               </p>
@@ -133,6 +142,19 @@ export function ClientProfile({ luidId, open, onClose }: ClientProfileProps) {
 
           {/* Info rows */}
           <div className="space-y-4">
+            {/* Client name row */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Tag className="w-3.5 h-3.5" style={{ color: 'oklch(0.5 0.04 150)' }} />
+                <span className="text-xs font-mono" style={{ color: 'oklch(0.5 0.04 150)' }}>
+                  NOME
+                </span>
+              </div>
+              <span className="text-xs font-mono" style={{ color: clientName ? 'oklch(0.75 0.05 150)' : 'oklch(0.35 0.02 150)' }}>
+                {clientName || 'Não definido'}
+              </span>
+            </div>
+
             {/* Creation date */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">

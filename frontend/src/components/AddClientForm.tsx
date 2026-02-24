@@ -11,6 +11,7 @@ interface AddClientFormProps {
 
 export function AddClientForm({ onClientAdded }: AddClientFormProps) {
   const [luidId, setLuidId] = useState('');
+  const [clientName, setClientName] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -22,7 +23,7 @@ export function AddClientForm({ onClientAdded }: AddClientFormProps) {
     setSuccess('');
 
     if (!luidId.trim() || !password.trim()) {
-      setError('Preencha todos os campos.');
+      setError('Preencha o LUID ID e a senha.');
       return;
     }
 
@@ -38,13 +39,14 @@ export function AddClientForm({ onClientAdded }: AddClientFormProps) {
 
     setLoading(true);
     setTimeout(() => {
-      const result = createClient(luidId.trim(), password.trim());
+      const result = createClient(luidId.trim(), password.trim(), clientName.trim());
       setLoading(false);
       if (!result) {
         setError(`LUID ID "${luidId.trim()}" já existe no sistema.`);
       } else {
         setSuccess(`Cliente "${luidId.trim()}" adicionado com sucesso.`);
         setLuidId('');
+        setClientName('');
         setPassword('');
         onClientAdded();
       }
@@ -55,7 +57,7 @@ export function AddClientForm({ onClientAdded }: AddClientFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1.5">
         <Label htmlFor="luid-id" className="font-mono text-xs text-muted-foreground tracking-wider uppercase">
-          LUID ID
+          LUID ID <span className="text-destructive">*</span>
         </Label>
         <Input
           id="luid-id"
@@ -68,8 +70,22 @@ export function AddClientForm({ onClientAdded }: AddClientFormProps) {
       </div>
 
       <div className="space-y-1.5">
+        <Label htmlFor="client-name" className="font-mono text-xs text-muted-foreground tracking-wider uppercase">
+          Nome do Cliente <span className="text-muted-foreground/50 text-xs normal-case">(opcional)</span>
+        </Label>
+        <Input
+          id="client-name"
+          value={clientName}
+          onChange={(e) => setClientName(e.target.value)}
+          placeholder="Nome completo ou apelido"
+          className="font-mono bg-industrial-surface border-industrial-border text-foreground placeholder:text-muted-foreground/50 focus:border-emerald-DEFAULT focus:ring-emerald-DEFAULT/20"
+          autoComplete="off"
+        />
+      </div>
+
+      <div className="space-y-1.5">
         <Label htmlFor="client-password" className="font-mono text-xs text-muted-foreground tracking-wider uppercase">
-          Senha
+          Senha <span className="text-destructive">*</span>
         </Label>
         <Input
           id="client-password"

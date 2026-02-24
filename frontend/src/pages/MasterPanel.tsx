@@ -8,22 +8,43 @@ import { AllTicketsView } from '../components/AllTicketsView';
 import { AllChatView } from '../components/AllChatView';
 import NotificationToast from '../components/NotificationToast';
 import { useNotifications } from '../hooks/useNotifications';
-import { UserPlus, Users, Ticket as TicketIcon, MessageSquare, UserCog, Wifi, WifiOff } from 'lucide-react';
-import { getStaff, createStaffMember, deleteStaffMember, getChatStatus, setChatStatus } from '../lib/db';
+import { UserPlus, Users, Ticket as TicketIcon, MessageSquare, UserCog, Wifi, WifiOff, KeyRound, Pencil, Check, X } from 'lucide-react';
+import { getStaff, createStaffMember, deleteStaffMember, getChatStatus, setChatStatus, updateStaff } from '../lib/db';
 import type { Staff } from '../types/db';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 type Section = 'add-client' | 'clients' | 'tickets' | 'chat' | 'staff';
+
+interface EditStaffState {
+  id: string;
+  username: string;
+  newPassword: string;
+  confirmPassword: string;
+  error: string;
+  success: string;
+}
 
 export default function MasterPanel() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState<Section>('clients');
+  const [clientsRefreshKey, setClientsRefreshKey] = useState(0);
   const [staffList, setStaffList] = useState<Staff[]>(() => getStaff());
   const [newStaffUsername, setNewStaffUsername] = useState('');
   const [newStaffPassword, setNewStaffPassword] = useState('');
   const [staffError, setStaffError] = useState('');
   const [staffSuccess, setStaffSuccess] = useState('');
   const [chatOnline, setChatOnline] = useState<boolean>(() => getChatStatus() === 'Online');
+  const [editStaffModal, setEditStaffModal] = useState<EditStaffState | null>(null);
 
   const { counts, toastMessage, clearTicketNotifications, clearChatNotifications } = useNotifications({
     role: 'master',
@@ -70,6 +91,52 @@ export default function MasterPanel() {
       deleteStaffMember(id);
       setStaffList(getStaff());
     }
+  };
+
+  const openEditStaff = (staff: Staff) => {
+    setEditStaffModal({
+      id: staff.id,
+      username: staff.username,
+      newPassword: '',
+      confirmPassword: '',
+      error: '',
+      success: '',
+    });
+  };
+
+  const closeEditStaff = () => setEditStaffModal(null);
+
+  const handleEditStaffSave = () => {
+    if (!editStaffModal) return;
+    const { id, username, newPassword, confirmPassword } = editStaffModal;
+
+    if (!username.trim()) {
+      setEditStaffModal(prev => prev ? { ...prev, error: 'O nome de usuário não pode estar vazio.', success: '' } : null);
+      return;
+    }
+
+    if (newPassword && newPassword !== confirmPassword) {
+      setEditStaffModal(prev => prev ? { ...prev, error: 'As senhas não coincidem.', success: '' } : null);
+      return;
+    }
+
+    if (newPassword && newPassword.trim().length < 4) {
+      setEditStaffModal(prev => prev ? { ...prev, error: 'A senha deve ter pelo menos 4 caracteres.', success: '' } : null);
+      return;
+    }
+
+    const updates: { username?: string; password?: string } = {};
+    updates.username = username.trim();
+    if (newPassword.trim()) updates.password = newPassword.trim();
+
+    const result = updateStaff(id, updates);
+    if (!result) {
+      setEditStaffModal(prev => prev ? { ...prev, error: 'Nome de usuário já está em uso por outro staff.', success: '' } : null);
+      return;
+    }
+
+    setEditStaffModal(prev => prev ? { ...prev, error: '', success: 'Credenciais atualizadas com sucesso!', newPassword: '', confirmPassword: '' } : null);
+    setStaffList(getStaff());
   };
 
   const navItems: { id: Section; label: string; icon: React.ReactNode }[] = [
@@ -188,8 +255,10 @@ export default function MasterPanel() {
             border: '1px solid oklch(0.75 0.18 80 / 0.2)',
           }}
         >
-          {activeSection === 'add-client' && <AddClientForm onClientAdded={() => {}} />}
-          {activeSection === 'clients' && <ClientsTable refreshKey={0} />}
+          {activeSection === 'add-client' && (
+            <AddClientForm onClientAdded={() => setClientsRefreshKey(k => k + 1)} />
+          )}
+          {activeSection === 'clients' && <ClientsTable refreshKey={clientsRefreshKey} />}
           {activeSection === 'tickets' && <AllTicketsView />}
           {activeSection === 'chat' && (
             <div>
@@ -317,24 +386,45 @@ export default function MasterPanel() {
                           </span>
                         </div>
                       </div>
-                      <button
-                        onClick={() => handleDeleteStaff(s.id, s.username)}
-                        className="text-xs font-mono px-3 py-1 rounded transition-all"
-                        style={{
-                          color: 'oklch(0.65 0.18 25)',
-                          border: '1px solid oklch(0.65 0.18 25 / 0.3)',
-                        }}
-                        onMouseEnter={e => {
-                          (e.currentTarget as HTMLButtonElement).style.background = 'oklch(0.65 0.18 25 / 0.1)';
-                          (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 8px oklch(0.65 0.18 25 / 0.3)';
-                        }}
-                        onMouseLeave={e => {
-                          (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
-                          (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none';
-                        }}
-                      >
-                        REMOVER
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => openEditStaff(s)}
+                          className="flex items-center gap-1 text-xs font-mono px-3 py-1 rounded transition-all"
+                          style={{
+                            color: 'oklch(0.7 0.15 220)',
+                            border: '1px solid oklch(0.7 0.15 220 / 0.3)',
+                          }}
+                          onMouseEnter={e => {
+                            (e.currentTarget as HTMLButtonElement).style.background = 'oklch(0.7 0.15 220 / 0.1)';
+                            (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 8px oklch(0.7 0.15 220 / 0.3)';
+                          }}
+                          onMouseLeave={e => {
+                            (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
+                            (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none';
+                          }}
+                        >
+                          <KeyRound className="w-3 h-3" />
+                          EDITAR
+                        </button>
+                        <button
+                          onClick={() => handleDeleteStaff(s.id, s.username)}
+                          className="text-xs font-mono px-3 py-1 rounded transition-all"
+                          style={{
+                            color: 'oklch(0.65 0.18 25)',
+                            border: '1px solid oklch(0.65 0.18 25 / 0.3)',
+                          }}
+                          onMouseEnter={e => {
+                            (e.currentTarget as HTMLButtonElement).style.background = 'oklch(0.65 0.18 25 / 0.1)';
+                            (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 8px oklch(0.65 0.18 25 / 0.3)';
+                          }}
+                          onMouseLeave={e => {
+                            (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
+                            (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none';
+                          }}
+                        >
+                          REMOVER
+                        </button>
+                      </div>
                     </div>
                   ))
                 )}
@@ -348,8 +438,107 @@ export default function MasterPanel() {
         className="py-4 text-center text-xs font-mono mt-auto"
         style={{ color: 'oklch(0.35 0.02 150)', borderTop: '1px solid oklch(0.75 0.18 80 / 0.08)' }}
       >
-        © {new Date().getFullYear()} LuidCentral — Todos os direitos reservados.
+        © {new Date().getFullYear()} LuidCorporation — Luid Central De Atendimento. Todos os direitos reservados.
       </footer>
+
+      {/* Edit Staff Credentials Modal */}
+      {editStaffModal && (
+        <Dialog open={!!editStaffModal} onOpenChange={(v) => { if (!v) closeEditStaff(); }}>
+          <DialogContent
+            className="max-w-sm"
+            style={{
+              background: 'oklch(0.11 0.008 150)',
+              border: '1px solid oklch(0.7 0.15 220 / 0.35)',
+              boxShadow: '0 0 40px oklch(0.7 0.15 220 / 0.1)',
+            }}
+          >
+            <DialogHeader>
+              <DialogTitle className="font-mono text-sm tracking-wider" style={{ color: 'oklch(0.7 0.15 220)' }}>
+                EDITAR CREDENCIAIS DO STAFF
+              </DialogTitle>
+              <DialogDescription className="font-mono text-xs" style={{ color: 'oklch(0.45 0.03 150)' }}>
+                Altere o usuário e/ou senha do membro da equipe.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-4 py-2">
+              <div className="space-y-1.5">
+                <label className="text-xs font-mono font-semibold tracking-wider" style={{ color: 'oklch(0.6 0.1 220)' }}>
+                  NOME DE USUÁRIO
+                </label>
+                <Input
+                  type="text"
+                  value={editStaffModal.username}
+                  onChange={e => setEditStaffModal(prev => prev ? { ...prev, username: e.target.value, error: '', success: '' } : null)}
+                  placeholder="Nome de usuário"
+                  className="font-mono bg-industrial-surface border-industrial-border text-foreground"
+                  autoFocus
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-xs font-mono font-semibold tracking-wider" style={{ color: 'oklch(0.6 0.1 220)' }}>
+                  NOVA SENHA <span className="text-xs normal-case font-normal" style={{ color: 'oklch(0.4 0.03 150)' }}>(deixe em branco para manter)</span>
+                </label>
+                <Input
+                  type="password"
+                  value={editStaffModal.newPassword}
+                  onChange={e => setEditStaffModal(prev => prev ? { ...prev, newPassword: e.target.value, error: '', success: '' } : null)}
+                  placeholder="Nova senha (opcional)"
+                  className="font-mono bg-industrial-surface border-industrial-border text-foreground"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-xs font-mono font-semibold tracking-wider" style={{ color: 'oklch(0.6 0.1 220)' }}>
+                  CONFIRMAR NOVA SENHA
+                </label>
+                <Input
+                  type="password"
+                  value={editStaffModal.confirmPassword}
+                  onChange={e => setEditStaffModal(prev => prev ? { ...prev, confirmPassword: e.target.value, error: '', success: '' } : null)}
+                  placeholder="Confirmar nova senha"
+                  className="font-mono bg-industrial-surface border-industrial-border text-foreground"
+                  onKeyDown={e => { if (e.key === 'Enter') handleEditStaffSave(); }}
+                />
+              </div>
+
+              {editStaffModal.error && (
+                <div className="flex items-center gap-2 text-xs font-mono p-2 rounded border"
+                  style={{ color: 'oklch(0.75 0.18 25)', background: 'oklch(0.75 0.18 25 / 0.08)', borderColor: 'oklch(0.75 0.18 25 / 0.3)' }}>
+                  ⚠ {editStaffModal.error}
+                </div>
+              )}
+              {editStaffModal.success && (
+                <div className="flex items-center gap-2 text-xs font-mono p-2 rounded border"
+                  style={{ color: 'oklch(0.85 0.28 142)', background: 'oklch(0.85 0.28 142 / 0.08)', borderColor: 'oklch(0.85 0.28 142 / 0.3)' }}>
+                  ✓ {editStaffModal.success}
+                </div>
+              )}
+            </div>
+
+            <DialogFooter className="gap-2">
+              <Button
+                variant="ghost"
+                onClick={closeEditStaff}
+                className="font-mono text-xs"
+                style={{ color: 'oklch(0.5 0.04 150)' }}
+              >
+                FECHAR
+              </Button>
+              <Button
+                onClick={handleEditStaffSave}
+                className="font-mono text-xs font-bold tracking-wider"
+                style={{
+                  background: 'oklch(0.7 0.15 220)',
+                  color: 'oklch(0.08 0.005 150)',
+                  boxShadow: '0 0 12px oklch(0.7 0.15 220 / 0.3)',
+                }}
+              >
+                SALVAR
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }

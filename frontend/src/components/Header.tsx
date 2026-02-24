@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { LogOut, Terminal, UserCircle } from 'lucide-react';
+import { LogOut, UserCircle } from 'lucide-react';
 import { ClientProfile } from './ClientProfile';
 
 interface HeaderProps {
@@ -42,25 +42,32 @@ export default function Header({ onLogout }: HeaderProps) {
           <div className="flex items-center justify-between h-14">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div
-                className="w-8 h-8 rounded flex items-center justify-center"
-                style={{
-                  background: 'oklch(0.85 0.28 142 / 0.1)',
-                  border: '1px solid oklch(0.85 0.28 142 / 0.4)',
-                  boxShadow: '0 0 10px oklch(0.85 0.28 142 / 0.2)',
+              <img
+                src="/assets/generated/luid-logo.dim_256x256.png"
+                alt="LuidCorporation"
+                className="h-9 w-9 object-contain"
+                style={{ filter: 'drop-shadow(0 0 6px oklch(0.85 0.28 142 / 0.5))' }}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).style.display = 'none';
                 }}
-              >
-                <Terminal className="w-4 h-4" style={{ color: 'oklch(0.85 0.28 142)' }} />
+              />
+              <div className="flex flex-col leading-none">
+                <span
+                  className="text-sm font-bold tracking-widest font-mono"
+                  style={{
+                    color: 'oklch(0.85 0.28 142)',
+                    textShadow: '0 0 10px oklch(0.85 0.28 142 / 0.5)',
+                  }}
+                >
+                  LUID CENTRAL DE ATENDIMENTO
+                </span>
+                <span
+                  className="text-xs font-mono tracking-wider"
+                  style={{ color: 'oklch(0.5 0.04 150)' }}
+                >
+                  LuidCorporation
+                </span>
               </div>
-              <span
-                className="text-lg font-bold tracking-widest font-mono"
-                style={{
-                  color: 'oklch(0.85 0.28 142)',
-                  textShadow: '0 0 10px oklch(0.85 0.28 142 / 0.5)',
-                }}
-              >
-                LUID<span style={{ color: 'oklch(0.95 0.02 150)' }}>CENTRAL</span>
-              </span>
             </div>
 
             {/* User info + logout */}
@@ -98,14 +105,13 @@ export default function Header({ onLogout }: HeaderProps) {
                         (e.currentTarget as HTMLButtonElement).style.borderColor = 'oklch(0.3 0.02 150)';
                         (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none';
                       }}
-                      title="Ver perfil"
                     >
                       <UserCircle className="w-3.5 h-3.5" />
-                      <span className="hidden sm:block">{user.displayName}</span>
+                      {user.displayName}
                     </button>
                   ) : (
                     <span
-                      className="text-xs font-mono hidden sm:block"
+                      className="text-xs font-mono"
                       style={{ color: 'oklch(0.65 0.08 150)' }}
                     >
                       {user.displayName}
@@ -115,25 +121,23 @@ export default function Header({ onLogout }: HeaderProps) {
 
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded transition-all duration-200"
+                  className="flex items-center gap-1.5 text-xs font-mono px-2.5 py-1.5 rounded transition-all duration-200"
                   style={{
-                    color: 'oklch(0.65 0.08 150)',
-                    border: '1px solid oklch(0.3 0.02 150)',
+                    color: 'oklch(0.65 0.18 25)',
+                    border: '1px solid oklch(0.65 0.18 25 / 0.3)',
                     background: 'transparent',
                   }}
                   onMouseEnter={e => {
-                    (e.currentTarget as HTMLButtonElement).style.color = 'oklch(0.85 0.28 142)';
-                    (e.currentTarget as HTMLButtonElement).style.borderColor = 'oklch(0.85 0.28 142 / 0.5)';
-                    (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 10px oklch(0.85 0.28 142 / 0.2)';
+                    (e.currentTarget as HTMLButtonElement).style.background = 'oklch(0.65 0.18 25 / 0.1)';
+                    (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 8px oklch(0.65 0.18 25 / 0.3)';
                   }}
                   onMouseLeave={e => {
-                    (e.currentTarget as HTMLButtonElement).style.color = 'oklch(0.65 0.08 150)';
-                    (e.currentTarget as HTMLButtonElement).style.borderColor = 'oklch(0.3 0.02 150)';
+                    (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
                     (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none';
                   }}
                 >
-                  <LogOut className="w-3 h-3" />
-                  <span>SAIR</span>
+                  <LogOut className="w-3.5 h-3.5" />
+                  SAIR
                 </button>
               </div>
             )}
@@ -141,7 +145,6 @@ export default function Header({ onLogout }: HeaderProps) {
         </div>
       </header>
 
-      {/* Client profile modal */}
       {user?.userType === 'client' && (
         <ClientProfile
           luidId={user.id}

@@ -1,97 +1,30 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-24T23:07:03.674Z",
+  "generatedAt": "2026-02-24T23:53:12.721Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 5,
-    "implemented": 5,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
-        "id": "REQ-13",
-        "summary": "Remove all visible links, buttons, or references to admin panels (/master, /staff) from the client portal UI. The client portal — including its header, footer, navigation tabs, and dashboard — must contain no mention of or navigation to any admin or staff routes. Admin panels remain accessible only by direct URL.",
+        "id": "REQ-24",
+        "summary": "Save the uploaded logo image as a static asset at `frontend/public/assets/generated/luid-logo.dim_256x256.png` and use it as the platform logo across all pages: replace any existing text-only or placeholder logo in the Header component (`frontend/src/components/Header.tsx`) with an `<img>` tag referencing `/assets/generated/luid-logo.dim_256x256.png`, and also display it prominently on all three login pages (ClientLogin, MasterLogin, StaffLogin) above the login form heading.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/ClientPortal.tsx",
-          "frontend/src/components/Header.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/ClientPortal.tsx",
-          "frontend/src/components/Header.tsx"
-        ]
-      },
-      {
-        "id": "REQ-14",
-        "summary": "Add a chat availability toggle (Online / Offline) to the Master admin panel and Staff panel. When set to Offline, the chat section in the client portal displays a message such as 'Support chat is currently offline' and the chat input is disabled. When set to Online, the chat functions normally. Persist the chat status in localStorage so it survives page reloads.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/MasterPanel.tsx",
-          "frontend/src/pages/StaffPanel.tsx",
-          "frontend/src/components/ChatView.tsx",
-          "frontend/src/pages/ClientPortal.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/MasterPanel.tsx",
-          "frontend/src/pages/StaffPanel.tsx",
-          "frontend/src/components/ChatView.tsx",
-          "frontend/src/pages/ClientPortal.tsx"
-        ]
-      },
-      {
-        "id": "REQ-15",
-        "summary": "Remove the 'Build with Caffeine AI' watermark or any similar branding attribution text from all pages of the application.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/ClientPortal.tsx",
-          "frontend/src/pages/MasterPanel.tsx",
-          "frontend/src/pages/StaffPanel.tsx",
+          "frontend/src/components/Header.tsx",
           "frontend/src/pages/ClientLogin.tsx",
           "frontend/src/pages/MasterLogin.tsx",
-          "frontend/src/pages/StaffLogin.tsx",
-          "frontend/src/components/Header.tsx"
+          "frontend/src/pages/StaffLogin.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/ClientPortal.tsx",
-          "frontend/src/pages/MasterPanel.tsx",
-          "frontend/src/pages/StaffPanel.tsx",
+          "frontend/src/components/Header.tsx",
           "frontend/src/pages/ClientLogin.tsx",
           "frontend/src/pages/MasterLogin.tsx",
-          "frontend/src/pages/StaffLogin.tsx",
-          "frontend/src/components/Header.tsx"
-        ]
-      },
-      {
-        "id": "REQ-16",
-        "summary": "Add a support tier field (values: Basic, Premium, Enterprise) to the client record in the localStorage 'clients' collection. In the Master admin panel's client management section, allow the admin to assign or change the support tier for each client via a dropdown or segmented control next to each client row. New clients default to 'Basic' if no tier is set.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/types/db.ts",
-          "frontend/src/lib/db.ts",
-          "frontend/src/components/ClientsTable.tsx",
-          "frontend/src/components/AddClientForm.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/types/db.ts",
-          "frontend/src/lib/db.ts",
-          "frontend/src/components/ClientsTable.tsx"
-        ]
-      },
-      {
-        "id": "REQ-17",
-        "summary": "Add a profile section to the client portal. A clickable profile element (e.g., avatar icon or the user's LUID ID displayed in the header) opens a profile view or modal. The profile view displays the client's LUID ID, account creation date, and their current support tier (Basic, Premium, or Enterprise) with a visually distinct neon-green tier badge. The tier value is read from the client's record in localStorage.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/ClientProfile.tsx",
-          "frontend/src/components/Header.tsx",
-          "frontend/src/pages/ClientPortal.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/ClientProfile.tsx",
-          "frontend/src/components/Header.tsx",
-          "frontend/src/pages/ClientPortal.tsx"
+          "frontend/src/pages/StaffLogin.tsx"
         ]
       }
     ]
@@ -101,18 +34,10 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/ChatView.tsx",
-    "frontend/src/components/ClientProfile.tsx",
-    "frontend/src/components/ClientsTable.tsx",
     "frontend/src/components/Header.tsx",
-    "frontend/src/lib/db.ts",
     "frontend/src/pages/ClientLogin.tsx",
-    "frontend/src/pages/ClientPortal.tsx",
     "frontend/src/pages/MasterLogin.tsx",
-    "frontend/src/pages/MasterPanel.tsx",
     "frontend/src/pages/StaffLogin.tsx",
-    "frontend/src/pages/StaffPanel.tsx",
-    "frontend/src/types/db.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

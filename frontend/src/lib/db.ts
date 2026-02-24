@@ -30,7 +30,9 @@ const CLIENTS_KEY = 'luidcentral_clients';
 export function getClients(): Client[] {
   try {
     const raw = localStorage.getItem(CLIENTS_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const clients: Client[] = raw ? JSON.parse(raw) : [];
+    // Ensure clientName defaults to empty string for existing records
+    return clients.map(c => ({ clientName: '', ...c }));
   } catch {
     return [];
   }
@@ -40,7 +42,7 @@ export function saveClients(clients: Client[]): void {
   localStorage.setItem(CLIENTS_KEY, JSON.stringify(clients));
 }
 
-export function createClient(luidId: string, password: string): Client | null {
+export function createClient(luidId: string, password: string, clientName: string = ''): Client | null {
   const clients = getClients();
   if (clients.find((c) => c.luidId === luidId)) return null;
   const client: Client = {
@@ -48,6 +50,7 @@ export function createClient(luidId: string, password: string): Client | null {
     passwordHash: hashPassword(password),
     createdAt: new Date().toISOString(),
     tier: 'Basic',
+    clientName: clientName.trim(),
   };
   clients.push(client);
   saveClients(clients);
@@ -68,6 +71,16 @@ export function updateClientTier(luidId: string, tier: SupportTier): Client | nu
   const idx = clients.findIndex((c) => c.luidId === luidId);
   if (idx === -1) return null;
   clients[idx].tier = tier;
+  saveClients(clients);
+  return clients[idx];
+}
+
+export function updateClient(luidId: string, updates: { clientName?: string; passwordHash?: string }): Client | null {
+  const clients = getClients();
+  const idx = clients.findIndex((c) => c.luidId === luidId);
+  if (idx === -1) return null;
+  if (updates.clientName !== undefined) clients[idx].clientName = updates.clientName;
+  if (updates.passwordHash !== undefined) clients[idx].passwordHash = updates.passwordHash;
   saveClients(clients);
   return clients[idx];
 }
@@ -109,6 +122,23 @@ export function createStaffMember(username: string, password: string, role: stri
   staff.push(member);
   saveStaff(staff);
   return member;
+}
+
+export function updateStaff(id: string, updates: { username?: string; password?: string }): Staff | null {
+  const staff = getStaff();
+  const idx = staff.findIndex((s) => s.id === id);
+  if (idx === -1) return null;
+  if (updates.username !== undefined && updates.username.trim()) {
+    // Check for duplicate username (excluding current)
+    const duplicate = staff.find((s) => s.username === updates.username!.trim() && s.id !== id);
+    if (duplicate) return null;
+    staff[idx].username = updates.username.trim();
+  }
+  if (updates.password !== undefined && updates.password.trim()) {
+    staff[idx].passwordHash = hashPassword(updates.password.trim());
+  }
+  saveStaff(staff);
+  return staff[idx];
 }
 
 export function validateStaffLogin(username: string, password: string): Staff | null {
