@@ -1,0 +1,34 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-24T23:07:03.669Z",
+  "summary": "The diff implements all five requirements (REQ-13 through REQ-17). REQ-13 is addressed by removing admin/staff route references from the client portal. REQ-14 is addressed by adding chat toggles to both Master and Staff panels and updating ChatView to show an offline state. REQ-15 is addressed by removing Caffeine AI watermarks from login pages and the portal. REQ-16 is addressed by adding the SupportTier type, tier field on Client, updateClientTier in db.ts, and a tier dropdown in ClientsTable. REQ-17 is addressed by adding ClientProfile.tsx and wiring it into the Header. One minor gap exists: the AC for REQ-14 specifies the offline message should say 'Support chat is currently offline' with a neon-styled message, but the implementation uses a different message in Portuguese.",
+  "missing_requirements": [
+    {
+      "id": "REQ-14",
+      "requirement": "When chat status is Offline, the client portal chat tab shows a neon-styled 'Support chat is currently offline' message and the message input is hidden or disabled.",
+      "reason": "The ChatView.tsx renders 'CHAT INDISPONÍVEL' and 'O suporte via chat está temporariamente offline' rather than the specified English text 'Support chat is currently offline'. While functionally equivalent and styled, the exact required message text is not present.",
+      "evidence": [
+        "frontend/src/components/ChatView.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [],
+  "confidence": 0.82,
+  "changed_files": [
+    "frontend-file-summaries.txt",
+    "frontend/src/components/ChatView.tsx",
+    "frontend/src/components/ClientProfile.tsx",
+    "frontend/src/components/ClientsTable.tsx",
+    "frontend/src/components/Header.tsx",
+    "frontend/src/lib/db.ts",
+    "frontend/src/pages/ClientLogin.tsx",
+    "frontend/src/pages/ClientPortal.tsx",
+    "frontend/src/pages/MasterLogin.tsx",
+    "frontend/src/pages/MasterPanel.tsx",
+    "frontend/src/pages/StaffLogin.tsx",
+    "frontend/src/pages/StaffPanel.tsx",
+    "frontend/src/types/db.ts",
+    "project_state.json"
+  ]
+}

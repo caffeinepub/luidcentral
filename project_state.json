@@ -1,0 +1,255 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 7,
+  "summary": "LuidCentral — a full-stack support central web app with localStorage-based internal database (clientes, staff, tickets, chat_messages tables), manual login validation (no external auth), a master admin panel at /master for managing clients, a staff panel at /staff, a full customer support portal with tickets and real-time chat, a modern Neon Green aesthetic, persistent login sessions (stay logged in), real-time notifications for new tickets/messages, and a prominent Create Ticket button in the client portal.",
+  "architectural_notes": [
+    "All data persisted in localStorage to simulate a backend database across page refreshes.",
+    "No external authentication libraries; login is a plain DB lookup against internal tables.",
+    "Master credentials hardcoded: username SidneiCosta00, password Nikebolado@4.",
+    "Routes /master and /staff must not be linked from the home page.",
+    "Session persistence stored in localStorage under session keys so users remain logged in after page refresh.",
+    "Client support tier (Premium, Basic, Enterprise) stored per client record in localStorage and manageable from the master panel."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-create-a-persistent-internal-database-layer-using-localstorage-that-stores-and-manages-four-collections-clients-luidid-passwordhash-createdat-staff-username-passwordhash-role-tickets-id-luidid-subject-messages-status-createdat-updatedat-and-chat-messages-id-luidid-sender-content-timestamp-expose-a-typed-db-utility-module-used-across-the-app-pre-seed-one-admin-record-username-sidneicosta00-password-nikebolado-4-in-an-admins-collection",
+      "title": "Create a persistent internal database layer using localStorage that stores and manages four collections: `clients` (luidId, passwordHash, createdAt), `staff` (username, passwordHash, role), `tickets` (id, luidId, subject, messages[], status, createdAt, updatedAt), and `chat_messages` (id, luidId, sender, content, timestamp). Expose a typed DB utility module used across the app. Pre-seed one admin record: username=SidneiCosta00 / password=Nikebolado@4 in an `admins` collection.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-manual-login-system-for-the-main-client-portal-route-a-login-page-asks-for-luid-id-and-password-on-submit-look-up-the-clients-collection-in-the-internal-db-and-compare-credentials-if-matched-store-the-authenticated-session-in-react-state-context-no-tokens-or-external-auth-redirect-authenticated-clients-to-their-portal-dashboard",
+      "title": "Implement a manual login system for the main client portal (route `/`). A login page asks for LUID ID and password. On submit, look up the `clients` collection in the internal DB and compare credentials. If matched, store the authenticated session in React state/context (no tokens or external auth). Redirect authenticated clients to their portal dashboard.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-master-admin-login-page-at-route-master-not-linked-anywhere-in-main-navigation-the-form-validates-username-and-password-against-the-admins-collection-in-the-internal-db-pre-seeded-with-sidneicosta00-nikebolado-4-on-success-grant-access-to-the-master-admin-panel",
+      "title": "Implement a Master admin login page at route `/master` (not linked anywhere in main navigation). The form validates username and password against the `admins` collection in the internal DB (pre-seeded with SidneiCosta00 / Nikebolado@4). On success, grant access to the Master admin panel.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-master-admin-panel-accessible-after-admin-login-at-master-it-must-include-1-a-form-to-add-new-client-records-by-entering-a-luid-id-and-password-written-immediately-to-the-clients-localstorage-collection-2-a-table-listing-all-existing-clients-3-a-view-of-all-tickets-across-all-clients-4-a-view-of-all-chat-messages-navigation-between-these-sections-should-use-tabs-or-a-sidebar-within-the-panel",
+      "title": "Build the Master admin panel (accessible after admin login at `/master`). It must include: (1) a form to add new client records by entering a LUID ID and password — written immediately to the `clients` localStorage collection; (2) a table listing all existing clients; (3) a view of all tickets across all clients; (4) a view of all chat_messages. Navigation between these sections should use tabs or a sidebar within the panel.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-staff-panel-at-route-staff-not-linked-anywhere-in-main-navigation-staff-can-log-in-using-credentials-from-the-staff-collection-once-authenticated-staff-can-view-and-respond-to-tickets-from-any-client-and-view-all-chat-messages",
+      "title": "Implement a Staff panel at route `/staff` (not linked anywhere in main navigation). Staff can log in using credentials from the `staff` collection. Once authenticated, staff can view and respond to tickets from any client, and view all chat messages.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-ticket-system-within-the-client-portal-after-login-a-client-can-create-a-new-support-ticket-subject-initial-message-each-ticket-stores-all-reply-messages-in-a-messages-array-linked-to-the-client-s-luid-id-in-the-tickets-collection-clients-can-only-see-their-own-tickets-staff-and-master-admin-can-see-and-reply-to-all-tickets",
+      "title": "Build a Ticket system within the client portal. After login, a client can create a new support ticket (subject + initial message). Each ticket stores all reply messages in a messages array, linked to the client's LUID ID in the `tickets` collection. Clients can only see their own tickets. Staff and master admin can see and reply to all tickets.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-chat-section-within-the-client-portal-the-client-can-send-messages-that-are-saved-to-chat-messages-in-localstorage-with-their-luid-id-timestamp-and-content-the-chat-thread-displays-full-history-for-that-client-staff-and-master-admin-can-view-all-chat-histories-filtered-by-luid-and-reply-to-any-client-s-chat",
+      "title": "Build a Chat section within the client portal. The client can send messages that are saved to `chat_messages` in localStorage with their LUID ID, timestamp, and content. The chat thread displays full history for that client. Staff and master admin can view all chat histories filtered by LUID and reply to any client's chat.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-dark-industrial-emerald-green-aesthetic-consistently-across-all-pages-use-a-near-black-background-0d0d0d-or-similar-dark-grey-surfaces-for-cards-and-panels-and-emerald-green-39ff14-as-the-primary-accent-color-for-buttons-borders-active-states-and-highlights-typography-should-use-a-clean-monospace-or-technical-sans-serif-font-the-ui-must-be-clean-fast-and-free-of-any-external-login-ui-dependencies",
+      "title": "Apply a Dark Industrial + Emerald Green aesthetic consistently across all pages. Use a near-black background (#0D0D0D or similar), dark grey surfaces for cards and panels, and Emerald Green (#39FF14) as the primary accent color for buttons, borders, active states, and highlights. Typography should use a clean monospace or technical sans-serif font. The UI must be clean, fast, and free of any external login UI dependencies.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-redesign-all-pages-client-login-client-portal-master-login-master-panel-staff-login-staff-panel-with-a-modern-neon-green-aesthetic-use-a-deep-near-black-background-0a0a0a-glassmorphism-style-dark-surface-cards-with-subtle-neon-green-39ff14-border-glow-bold-neon-green-accent-buttons-with-hover-pulse-glow-animations-upgraded-typography-using-jetbrains-mono-or-similar-technical-font-refined-spacing-and-layout-with-cleaner-hierarchy-and-consistent-neon-glow-effects-on-active-states-inputs-and-interactive-elements-the-redesign-must-replace-the-current-dark-industrial-look-with-a-sleeker-more-modern-feel-while-keeping-all-existing-functionality-intact",
+      "title": "Redesign all pages (client login, client portal, master login, master panel, staff login, staff panel) with a modern Neon Green aesthetic: use a deep near-black background (#0A0A0A), glassmorphism-style dark surface cards with subtle neon green (#39FF14) border glow, bold neon green accent buttons with hover pulse/glow animations, upgraded typography using JetBrains Mono or similar technical font, refined spacing and layout with cleaner hierarchy, and consistent neon glow effects on active states, inputs, and interactive elements. The redesign must replace the current Dark Industrial look with a sleeker, more modern feel while keeping all existing functionality intact.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-stay-logged-in-checkbox-to-all-three-login-pages-client-login-at-master-login-at-master-staff-login-at-staff-when-checked-persist-the-authenticated-session-to-localstorage-instead-of-sessionstorage-so-that-the-user-remains-logged-in-after-page-refresh-or-browser-tab-close-when-unchecked-keep-the-existing-sessionstorage-behavior-update-authcontext-tsx-to-read-from-localstorage-on-initialization-and-restore-the-session-if-present",
+      "title": "Add a 'Stay logged in' checkbox to all three login pages (Client Login at `/`, Master Login at `/master`, Staff Login at `/staff`). When checked, persist the authenticated session to localStorage instead of sessionStorage so that the user remains logged in after page refresh or browser tab close. When unchecked, keep the existing sessionStorage behavior. Update `AuthContext.tsx` to read from localStorage on initialization and restore the session if present.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-real-time-visual-notifications-for-new-tickets-and-new-chat-messages-within-the-client-portal-staff-panel-and-master-panel-use-polling-every-3-5-seconds-against-localstorage-to-detect-new-items-since-the-last-known-state-display-an-animated-neon-green-notification-badge-counter-on-the-relevant-tab-or-section-header-when-new-items-are-detected-show-a-brief-toast-or-banner-notification-message-e-g-new-ticket-received-or-new-message-from-luid-that-auto-dismisses-after-4-seconds-notifications-must-respect-the-user-s-role-clients-see-notifications-only-for-replies-to-their-own-tickets-messages-staff-and-master-admin-see-notifications-for-all-new-tickets-and-messages",
+      "title": "Implement real-time visual notifications for new tickets and new chat messages within the client portal, staff panel, and master panel. Use polling (every 3–5 seconds) against localStorage to detect new items since the last known state. Display an animated neon green notification badge/counter on the relevant tab or section header when new items are detected. Show a brief toast or banner notification message (e.g., 'New ticket received' or 'New message from [LUID]') that auto-dismisses after 4 seconds. Notifications must respect the user's role: clients see notifications only for replies to their own tickets/messages; staff and master admin see notifications for all new tickets and messages.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-prominent-create-ticket-button-to-the-client-portal-dashboard-visible-immediately-after-login-without-requiring-the-user-to-navigate-to-a-tab-first-the-button-should-appear-in-the-main-portal-area-e-g-as-a-floating-action-button-or-a-highlighted-call-to-action-card-clicking-it-opens-the-existing-createticket-form-inline-or-in-a-modal-the-button-must-use-the-neon-green-accent-style-with-a-glow-effect-consistent-with-req-9",
+      "title": "Add a prominent 'Create Ticket' button to the client portal dashboard, visible immediately after login without requiring the user to navigate to a tab first. The button should appear in the main portal area (e.g., as a floating action button or a highlighted call-to-action card). Clicking it opens the existing CreateTicket form inline or in a modal. The button must use the neon green accent style with a glow effect consistent with REQ-9.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-all-visible-links-buttons-or-references-to-admin-panels-master-staff-from-the-client-portal-ui-the-client-portal-including-its-header-footer-navigation-tabs-and-dashboard-must-contain-no-mention-of-or-navigation-to-any-admin-or-staff-routes-admin-panels-remain-accessible-only-by-direct-url",
+      "title": "Remove all visible links, buttons, or references to admin panels (/master, /staff) from the client portal UI. The client portal — including its header, footer, navigation tabs, and dashboard — must contain no mention of or navigation to any admin or staff routes. Admin panels remain accessible only by direct URL.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-chat-availability-toggle-online-offline-to-the-master-admin-panel-and-staff-panel-when-set-to-offline-the-chat-section-in-the-client-portal-displays-a-message-such-as-support-chat-is-currently-offline-and-the-chat-input-is-disabled-when-set-to-online-the-chat-functions-normally-persist-the-chat-status-in-localstorage-so-it-survives-page-reloads",
+      "title": "Add a chat availability toggle (Online / Offline) to the Master admin panel and Staff panel. When set to Offline, the chat section in the client portal displays a message such as 'Support chat is currently offline' and the chat input is disabled. When set to Online, the chat functions normally. Persist the chat status in localStorage so it survives page reloads.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-build-with-caffeine-ai-watermark-or-any-similar-branding-attribution-text-from-all-pages-of-the-application",
+      "title": "Remove the 'Build with Caffeine AI' watermark or any similar branding attribution text from all pages of the application.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-support-tier-field-values-basic-premium-enterprise-to-the-client-record-in-the-localstorage-clients-collection-in-the-master-admin-panel-s-client-management-section-allow-the-admin-to-assign-or-change-the-support-tier-for-each-client-via-a-dropdown-or-segmented-control-next-to-each-client-row-new-clients-default-to-basic-if-no-tier-is-set",
+      "title": "Add a support tier field (values: Basic, Premium, Enterprise) to the client record in the localStorage 'clients' collection. In the Master admin panel's client management section, allow the admin to assign or change the support tier for each client via a dropdown or segmented control next to each client row. New clients default to 'Basic' if no tier is set.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-profile-section-to-the-client-portal-a-clickable-profile-element-e-g-avatar-icon-or-the-user-s-luid-id-displayed-in-the-header-opens-a-profile-view-or-modal-the-profile-view-displays-the-client-s-luid-id-account-creation-date-and-their-current-support-tier-basic-premium-or-enterprise-with-a-visually-distinct-neon-green-tier-badge-the-tier-value-is-read-from-the-client-s-record-in-localstorage",
+      "title": "Add a profile section to the client portal. A clickable profile element (e.g., avatar icon or the user's LUID ID displayed in the header) opens a profile view or modal. The profile view displays the client's LUID ID, account creation date, and their current support tier (Basic, Premium, or Enterprise) with a visually distinct neon-green tier badge. The tier value is read from the client's record in localStorage.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "localStorage-based internal database with clientes, staff, tickets, and chat_messages tables",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Manual login system: validate LUID ID + password against internal DB (no external auth)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Master admin panel at /master: login as SidneiCosta00 / Nikebolado@4, add new client records (LUID ID + password)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Staff panel at /staff (hidden from home navigation)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Ticket system: async messaging linked to client LUID ID in the internal DB",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Real-time chat system with history saved in chat_messages table",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Customer portal: after manual login, client sees only their own tickets and chat filtered by LUID ID",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Dark Industrial + Emerald Green (#39FF14) UI design, no external login dependencies",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Modernize the UI design with a neon green aesthetic — updated typography, layouts, and visual components",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Persistent login sessions: 'Stay logged in' option so sessions survive page refreshes (store session in localStorage)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Real-time visual notifications for new tickets and chat messages (polling or event-based within the app)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Prominent Create Ticket button accessible from the client portal dashboard",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Hide admin panel links/sections from the client portal — admin panels must not be visible to clients",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Chat online/offline toggle in the admin/master panel — staff can set chat availability status",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Remove 'Build with caffeine AI' watermark from the app",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Client profile page: when client clicks their profile, they see their support tier (Premium, Basic, or Enterprise). The tier is editable from the master admin panel and stored per client in the DB.",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "LuidCentral",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

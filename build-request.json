@@ -1,0 +1,119 @@
+{
+  "kind": "build_request",
+  "title": "Hide admin links from client portal, chat online/offline toggle, remove watermark, add client profile with support tier",
+  "projectName": "LuidCentral",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-13",
+      "text": "Remove all visible links, buttons, or references to admin panels (/master, /staff) from the client portal UI. The client portal — including its header, footer, navigation tabs, and dashboard — must contain no mention of or navigation to any admin or staff routes. Admin panels remain accessible only by direct URL.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Mantenha discreto os paineis de administração ou seja não é pra aparecer em baixo no painel dos clientes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "No links or buttons pointing to /master or /staff appear anywhere in the client portal after login.",
+        "The client portal header, footer, tabs, and dashboard contain zero references to admin or staff routes.",
+        "Navigating directly to /master and /staff still works as before."
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "text": "Add a chat availability toggle (Online / Offline) to the Master admin panel and Staff panel. When set to Offline, the chat section in the client portal displays a message such as 'Support chat is currently offline' and the chat input is disabled. When set to Online, the chat functions normally. Persist the chat status in localStorage so it survives page reloads.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "o chat deve ter a opção de deixar ele online e offline no painel de administração"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Master panel and Staff panel each have a clearly labeled toggle or button to set chat status to Online or Offline.",
+        "Chat status is stored in localStorage (e.g., key 'chat_status') and defaults to Online.",
+        "When chat status is Offline, the client portal chat tab shows a neon-styled 'Support chat is currently offline' message and the message input is hidden or disabled.",
+        "When chat status is Online, the client portal chat works as normal.",
+        "Changes to the toggle are reflected immediately without requiring a page reload."
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "text": "Remove the 'Build with Caffeine AI' watermark or any similar branding attribution text from all pages of the application.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "tire a marca da água build with caffeine ai"
+        ]
+      },
+      "acceptanceCriteria": [
+        "No 'Build with Caffeine AI', 'Powered by Caffeine', or similar text appears on any page or component.",
+        "No hidden or visually subtle watermark referencing Caffeine AI exists in the DOM."
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "text": "Add a support tier field (values: Basic, Premium, Enterprise) to the client record in the localStorage 'clients' collection. In the Master admin panel's client management section, allow the admin to assign or change the support tier for each client via a dropdown or segmented control next to each client row. New clients default to 'Basic' if no tier is set.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "isso pode ser alterado pelo painel master"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Client TypeScript interface and db.ts include a 'tier' field typed as 'Basic' | 'Premium' | 'Enterprise'.",
+        "Newly created clients default to 'Basic' tier.",
+        "The Master admin panel clients table displays each client's current tier.",
+        "Master admin can change any client's tier via a dropdown (Basic / Premium / Enterprise); the change is immediately persisted to localStorage.",
+        "Tier changes are reflected instantly without a full page reload."
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "text": "Add a profile section to the client portal. A clickable profile element (e.g., avatar icon or the user's LUID ID displayed in the header) opens a profile view or modal. The profile view displays the client's LUID ID, account creation date, and their current support tier (Basic, Premium, or Enterprise) with a visually distinct neon-green tier badge. The tier value is read from the client's record in localStorage.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "faça o perfil e quando o cliente clica la ele consegue ver o nível do suporte dele se é Premium ou basic ou Enterprise"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The client portal header or dashboard contains a clickable profile element showing the user's LUID ID.",
+        "Clicking the profile element opens a modal or inline panel with: LUID ID, account creation date, and support tier.",
+        "The support tier is displayed as a styled badge using the neon green theme (e.g., green glow for Premium/Enterprise, muted for Basic).",
+        "The tier displayed matches the value stored in localStorage for that client.",
+        "If the master admin changes the tier, refreshing the portal shows the updated tier.",
+        "The profile view can be dismissed or closed."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui.",
+    "All data persistence must remain in localStorage — no backend changes required.",
+    "Keep all existing functionality (tickets, chat, notifications, stay-logged-in, Create Ticket button) intact."
+  ],
+  "nonGoals": [
+    "Adding a backend canister for tier management.",
+    "Email or push notifications for tier changes.",
+    "Adding new admin roles beyond master and staff.",
+    "Any changes to /master or /staff login flows."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
